@@ -129,22 +129,17 @@ def get_data(url, filename):
 
     s.mount('https://', HTTPAdapter(max_retries=retries))
 
-    try:
-        r = s.get(url)
-    
-        if r and r.status_code != requests.codes.ok:
-            log.error("Wind Toolkit returned invalid data, HTTP " + str(r.status_code))
-            raise ValueError('Wind Toolkit returned invalid data, HTTP ' + str(r.status_code))
-        elif r and r.status_code == requests.codes.ok:
-            localfile = open(filename, mode='w+')
-            localfile.write(r.text)
-        if os.path.isfile(filename):
-            return True
-    
-    except:
-        log.error("Wind data download timed out " + str(n_max_tries) + "times")
-        raise ValueError('Wind Dataset Timed Out')
+    r = s.get(url)
 
+    if r and r.status_code != requests.codes.ok:
+        log.error("Wind Toolkit returned invalid data, HTTP " + str(r.status_code))
+        raise ValueError('Wind Toolkit returned invalid data, HTTP ' + str(r.status_code))
+    elif r and r.status_code == requests.codes.ok:
+        localfile = open(filename, mode='w+')
+        localfile.write(r.text)
+    if os.path.isfile(filename):
+        return True
+    
 
 def get_wind_resource_developer_api(filename, year, latitude, longitude, hub_height_meters):
 
