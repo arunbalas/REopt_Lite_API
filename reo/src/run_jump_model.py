@@ -135,7 +135,8 @@ def run_jump_model(self, dfm, data, run_uuid, bau=False):
 
             t_start = time.time()
             model = Main.reopt_model(data["inputs"]["Scenario"]["timeout_seconds"],
-                                     data["inputs"]["Scenario"]["optimality_tolerance"])
+                                     data["inputs"]["Scenario"]["optimality_tolerance"],
+					"GLOBALLOG_{}_{}.txt".format(self.run_uuid, str(bau)))
             time_dict["pyjulia_make_model_seconds"] = time.time() - t_start
 
         elif os.environ.get("SOLVER") == "cbc":
