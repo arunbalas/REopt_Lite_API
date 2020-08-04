@@ -37,6 +37,7 @@ import requests
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 import json
+from reo.exceptions import UnexpectedError
 
 from keys import developer_nrel_gov_key
 import logging
@@ -135,8 +136,14 @@ def get_data(url, filename):
         log.error("Wind Toolkit returned invalid data, HTTP " + str(r.status_code))
         raise ValueError('Wind Toolkit returned invalid data, HTTP ' + str(r.status_code))
     elif r and r.status_code == requests.codes.ok:
-        localfile = open(filename, mode='w+')
-        localfile.write(r.text)
+        try:
+            localfile = open(filename, mode='w+')
+            localfile.write(r.text)
+        except exception as e:
+            exc = UnexpectedError(exc_type, exc_value.args[0], filename, task=self.name, run_uuid=kwargs['run_uuid'],
+                              user_uuid=kwargs['data']['inputs']['Scenario'].get('user_uuid'))
+            exc.save_to_db()
+            raise e
     if os.path.isfile(filename):
         return True
     
