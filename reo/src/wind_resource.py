@@ -140,8 +140,9 @@ def get_data(url, filename):
             localfile = open(filename, mode='w+')
             localfile.write(r.text)
         except Exception as e:
-            exc = UnexpectedError(exc_type, exc_value.args[0], filename, task=self.name, run_uuid=kwargs['run_uuid'],
-                              user_uuid=kwargs['data']['inputs']['Scenario'].get('user_uuid'))
+            import sys
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            exc = UnexpectedError(exc_type, exc_value.args[0], filename)
             exc.save_to_db()
             raise e
     if os.path.isfile(filename):
