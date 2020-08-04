@@ -139,7 +139,7 @@ def get_data(url, filename):
         try:
             localfile = open(filename, mode='w+')
             localfile.write(r.text)
-        except exception as e:
+        except Exception as e:
             exc = UnexpectedError(exc_type, exc_value.args[0], filename, task=self.name, run_uuid=kwargs['run_uuid'],
                               user_uuid=kwargs['data']['inputs']['Scenario'].get('user_uuid'))
             exc.save_to_db()
