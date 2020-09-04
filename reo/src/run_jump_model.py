@@ -230,6 +230,7 @@ def run_jump_model(self, dfm, data, run_uuid, bau=False):
         del dfm['reopt_inputs']
     return dfm
 
+
 def run_decomposed_model(data, model, reopt_inputs,
                          lb_iters=1, max_iters=100):
     time_limit = data["inputs"]["Scenario"]["timeout_seconds"]
@@ -304,6 +305,7 @@ def build_submodels(models, reopt_param):
         result_dicts[idx] = julia.Main.reopt_build(models[idx], reopt_param)
     return result_dicts
 
+
 def solve_subproblems(models, reopt_param, results_dicts, update):
     """
     Solves subproblems, so far in a for loop.
@@ -375,6 +377,7 @@ def get_objective_value(ub_result_dicts, reopt_inputs):
         logger.info("infeasible solution returned.")
         return 1.0e100, 0., 0.
 
+
 def get_added_peak_tou_costs(ub_result_dicts, reopt_inputs):
     """
     Calculated added TOU costs to according to peak lookback months.
@@ -401,6 +404,7 @@ def get_added_peak_tou_costs(ub_result_dicts, reopt_inputs):
             for idx in range(len(bins)):
                 added_obj += reopt_inputs["DemandRates"][idx*reopt_inputs["NumRatchets"]+bins[idx]] * vals[idx]
     return added_obj
+
 
 def get_added_demand_by_bin(start, added_demand, max_demand_by_bin):
     """
@@ -448,6 +452,7 @@ def get_average_sizing_decisions(models, reopt_param):
         sizes[key] /= 12.
     return sizes
 
+
 def get_max_sizing_decisions(models, reopt_param):
     sizes = julia.Main.get_sizing_decisions(models[1], reopt_param)
     for i in range(2, 13):
@@ -464,6 +469,7 @@ def get_min_sizing_decisions(models, reopt_param):
         for key in d.keys():
             sizes[key] = min(d[key], sizes[key])
     return sizes
+
 
 def aggregate_submodel_results(ub_results, obj, min_charge_adder, pwf_e):
     results = ub_results[1]
